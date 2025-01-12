@@ -26,7 +26,9 @@ func (c *LoginController) Post() {
 	password := c.Input().Get("password")
 	autologin := c.Input().Get("autologin") == "on"
 	//判断用户名密码是否正确
-	if beego.AppConfig.String("login_user") == username && beego.AppConfig.String("login_password") == password {
+	rightUser := beego.AppConfig.String("login_user")
+	rightPass := beego.AppConfig.String("login_password")
+	if rightUser == username && rightPass == password {
 		maxage := 0
 		if autologin {
 			maxage = 1<<31 - 1
@@ -50,7 +52,7 @@ func (c *LoginController) Post() {
 	//return
 }
 
-//检查cookie是否为登录状态
+// 检查cookie是否为登录状态
 func CheckAccount(mycookie *context.Context) bool {
 	ck, err := mycookie.Request.Cookie("username")
 	if err != nil {
